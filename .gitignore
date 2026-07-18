@@ -16,5 +16,8 @@ env/
 *.log
 logs/
 
+# SQLite database
+data/iam.db
+
 # Editor files
 .vscode/
