@@ -161,3 +161,39 @@ class IAMService:
             "message": f"Employee '{employee_id}' role updated to '{new_job_title}'.",
             "employee": updated_employee,
         }
+
+    def terminate_employee(self, employee_id: str) -> Dict[str, Any]:
+        """Terminate an employee (Leaver workflow).
+
+        This sets `status` to `terminated` and removes all `groups` and
+        `applications` while preserving identity fields such as
+        `employee_id`, `first_name`, `last_name`, `username`, `manager`,
+        `department`, and `job_title`.
+        """
+        employees = self._load_employees()
+
+        # Locate the employee record
+        target = None
+        for emp in employees:
+            if emp.get("employee_id") == employee_id:
+                target = emp
+                break
+
+        if target is None:
+            return {"success": False, "message": f"Employee ID '{employee_id}' not found."}
+
+        # Apply termination changes
+        target["status"] = "terminated"
+        target["groups"] = []
+        target["applications"] = []
+
+        # Persist changes
+        self._save_employees(employees)
+
+        updated_employee = Employee.from_dict(target)
+
+        return {
+            "success": True,
+            "message": f"Employee '{employee_id}' terminated successfully.",
+            "employee": updated_employee,
+        }
