@@ -121,3 +121,43 @@ class IAMService:
         normalized = re.sub(r"[^a-z0-9.]+", "", normalized)
         normalized = re.sub(r"\.{2,}", ".", normalized)
         return normalized
+
+    def update_employee_role(self, employee_id: str, new_job_title: str) -> Dict[str, Any]:
+        """Update an existing employee's role (Mover workflow).
+
+        This updates `job_title`, `groups`, and `applications` while preserving
+        `employee_id`, `username`, `manager`, and `department`.
+        """
+        employees = self._load_employees()
+
+        # Find employee record
+        target = None
+        for emp in employees:
+            if emp.get("employee_id") == employee_id:
+                target = emp
+                break
+
+        if target is None:
+            return {"success": False, "message": f"Employee ID '{employee_id}' not found."}
+
+        roles = self._load_roles()
+        role_data = roles.get(new_job_title)
+        if role_data is None:
+            return {"success": False, "message": f"Invalid job title '{new_job_title}'."}
+
+        # Update the mutable fields according to the new role
+        target["job_title"] = new_job_title
+        target["groups"] = list(role_data.get("groups", []))
+        target["applications"] = list(role_data.get("applications", []))
+
+        # Persist changes
+        self._save_employees(employees)
+
+        # Return an Employee object for convenience
+        updated_employee = Employee.from_dict(target)
+
+        return {
+            "success": True,
+            "message": f"Employee '{employee_id}' role updated to '{new_job_title}'.",
+            "employee": updated_employee,
+        }
