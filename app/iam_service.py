@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from app.audit import AuditLogger
 from app.models import Employee
 
 
@@ -13,33 +14,56 @@ class IAMService:
         self,
         employees_path: Optional[str] = None,
         roles_path: Optional[str] = None,
+        audit_log_path: Optional[str] = None,
     ):
         repo_root = Path(__file__).resolve().parents[1]
         self.employees_path = Path(employees_path) if employees_path else repo_root / "data" / "employees.json"
         self.roles_path = Path(roles_path) if roles_path else repo_root / "data" / "roles.json"
+        self.audit_logger = AuditLogger(audit_log_path)
 
     def create_employee(self, employee: Employee) -> Dict[str, Any]:
         """Create a new employee record for the Joiner workflow."""
         missing_fields = self._validate_required_fields(employee)
         if missing_fields:
+            error_msg = f"Missing required fields: {', '.join(missing_fields)}"
+            self.audit_logger.log_event(
+                action="CREATE",
+                employee_id=employee.employee_id if employee.employee_id else "UNKNOWN",
+                status="FAILED",
+                details={"reason": error_msg},
+            )
             return {
                 "success": False,
-                "message": f"Missing required fields: {', '.join(missing_fields)}",
+                "message": error_msg,
             }
 
         employees = self._load_employees()
         if self._employee_id_exists(employee.employee_id, employees):
+            error_msg = f"Employee ID '{employee.employee_id}' already exists."
+            self.audit_logger.log_event(
+                action="CREATE",
+                employee_id=employee.employee_id,
+                status="FAILED",
+                details={"reason": error_msg},
+            )
             return {
                 "success": False,
-                "message": f"Employee ID '{employee.employee_id}' already exists.",
+                "message": error_msg,
             }
 
         roles = self._load_roles()
         role_data = roles.get(employee.job_title)
         if role_data is None:
+            error_msg = f"Invalid job title '{employee.job_title}'."
+            self.audit_logger.log_event(
+                action="CREATE",
+                employee_id=employee.employee_id,
+                status="FAILED",
+                details={"reason": error_msg},
+            )
             return {
                 "success": False,
-                "message": f"Invalid job title '{employee.job_title}'.",
+                "message": error_msg,
             }
 
         employee.groups = list(role_data.get("groups", []))
@@ -48,6 +72,17 @@ class IAMService:
 
         employees.append(employee.to_dict())
         self._save_employees(employees)
+
+        self.audit_logger.log_event(
+            action="CREATE",
+            employee_id=employee.employee_id,
+            status="SUCCESS",
+            details={
+                "username": employee.username,
+                "job_title": employee.job_title,
+                "department": employee.department,
+            },
+        )
 
         return {
             "success": True,
@@ -138,20 +173,45 @@ class IAMService:
                 break
 
         if target is None:
-            return {"success": False, "message": f"Employee ID '{employee_id}' not found."}
+            error_msg = f"Employee ID '{employee_id}' not found."
+            self.audit_logger.log_event(
+                action="UPDATE_ROLE",
+                employee_id=employee_id,
+                status="FAILED",
+                details={"reason": error_msg},
+            )
+            return {"success": False, "message": error_msg}
 
         roles = self._load_roles()
         role_data = roles.get(new_job_title)
         if role_data is None:
-            return {"success": False, "message": f"Invalid job title '{new_job_title}'."}
+            error_msg = f"Invalid job title '{new_job_title}'."
+            self.audit_logger.log_event(
+                action="UPDATE_ROLE",
+                employee_id=employee_id,
+                status="FAILED",
+                details={"reason": error_msg},
+            )
+            return {"success": False, "message": error_msg}
 
         # Update the mutable fields according to the new role
+        old_job_title = target.get("job_title")
         target["job_title"] = new_job_title
         target["groups"] = list(role_data.get("groups", []))
         target["applications"] = list(role_data.get("applications", []))
 
         # Persist changes
         self._save_employees(employees)
+
+        self.audit_logger.log_event(
+            action="UPDATE_ROLE",
+            employee_id=employee_id,
+            status="SUCCESS",
+            details={
+                "old_job_title": old_job_title,
+                "new_job_title": new_job_title,
+            },
+        )
 
         # Return an Employee object for convenience
         updated_employee = Employee.from_dict(target)
@@ -180,7 +240,14 @@ class IAMService:
                 break
 
         if target is None:
-            return {"success": False, "message": f"Employee ID '{employee_id}' not found."}
+            error_msg = f"Employee ID '{employee_id}' not found."
+            self.audit_logger.log_event(
+                action="TERMINATE",
+                employee_id=employee_id,
+                status="FAILED",
+                details={"reason": error_msg},
+            )
+            return {"success": False, "message": error_msg}
 
         # Apply termination changes
         target["status"] = "terminated"
@@ -189,6 +256,16 @@ class IAMService:
 
         # Persist changes
         self._save_employees(employees)
+
+        self.audit_logger.log_event(
+            action="TERMINATE",
+            employee_id=employee_id,
+            status="SUCCESS",
+            details={
+                "job_title": target.get("job_title"),
+                "department": target.get("department"),
+            },
+        )
 
         updated_employee = Employee.from_dict(target)
 
