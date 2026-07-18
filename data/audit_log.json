@@ -1,0 +1,474 @@
+[
+  {
+    "timestamp": "2026-07-18T01:39:39.273568Z",
+    "action": "CREATE",
+    "employee_id": "E100",
+    "status": "SUCCESS",
+    "details": {
+      "username": "abdul.aziz",
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.275744Z",
+    "action": "CREATE",
+    "employee_id": "E101",
+    "status": "SUCCESS",
+    "details": {
+      "username": "nina.patel",
+      "job_title": "HR Specialist",
+      "department": "HR"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.276112Z",
+    "action": "CREATE",
+    "employee_id": "E101",
+    "status": "FAILED",
+    "details": {
+      "reason": "Employee ID 'E101' already exists."
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.277561Z",
+    "action": "CREATE",
+    "employee_id": "UNKNOWN",
+    "status": "FAILED",
+    "details": {
+      "reason": "Missing required fields: employee_id, last_name"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.279227Z",
+    "action": "CREATE",
+    "employee_id": "E102",
+    "status": "SUCCESS",
+    "details": {
+      "username": "abdul.aziz",
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.280977Z",
+    "action": "CREATE",
+    "employee_id": "E103",
+    "status": "SUCCESS",
+    "details": {
+      "username": "abdul.aziz",
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.281528Z",
+    "action": "CREATE",
+    "employee_id": "E104",
+    "status": "SUCCESS",
+    "details": {
+      "username": "abdul.aziz2",
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.283297Z",
+    "action": "CREATE",
+    "employee_id": "E105",
+    "status": "SUCCESS",
+    "details": {
+      "username": "sofia.lee",
+      "job_title": "Finance Analyst",
+      "department": "Finance"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.284774Z",
+    "action": "CREATE",
+    "employee_id": "E106",
+    "status": "FAILED",
+    "details": {
+      "reason": "Invalid job title 'Legal Consultant'."
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.286661Z",
+    "action": "CREATE",
+    "employee_id": "L001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "taylor.smith",
+      "job_title": "Help Desk Analyst",
+      "department": "Support"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.287154Z",
+    "action": "TERMINATE",
+    "employee_id": "L001",
+    "status": "SUCCESS",
+    "details": {
+      "job_title": "Help Desk Analyst",
+      "department": "Support"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.288929Z",
+    "action": "TERMINATE",
+    "employee_id": "NONEXISTENT",
+    "status": "FAILED",
+    "details": {
+      "reason": "Employee ID 'NONEXISTENT' not found."
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.290770Z",
+    "action": "CREATE",
+    "employee_id": "L001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "taylor.smith",
+      "job_title": "Software Developer",
+      "department": "Support"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.291658Z",
+    "action": "TERMINATE",
+    "employee_id": "L001",
+    "status": "SUCCESS",
+    "details": {
+      "job_title": "Software Developer",
+      "department": "Support"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.294867Z",
+    "action": "CREATE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "alex.morgan",
+      "job_title": "Help Desk Analyst",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.295625Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "old_job_title": "Help Desk Analyst",
+      "new_job_title": "IAM Analyst"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.297216Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "NONEXIST",
+    "status": "FAILED",
+    "details": {
+      "reason": "Employee ID 'NONEXIST' not found."
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.299421Z",
+    "action": "CREATE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "alex.morgan",
+      "job_title": "Help Desk Analyst",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.299976Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "M001",
+    "status": "FAILED",
+    "details": {
+      "reason": "Invalid job title 'Legal Consultant'."
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.301937Z",
+    "action": "CREATE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "alex.morgan",
+      "job_title": "Help Desk Analyst",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.302618Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "old_job_title": "Help Desk Analyst",
+      "new_job_title": "IAM Analyst"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.304937Z",
+    "action": "CREATE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "alex.morgan",
+      "job_title": "Software Developer",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:39:39.305824Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "old_job_title": "Software Developer",
+      "new_job_title": "Security Analyst"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.763996Z",
+    "action": "CREATE",
+    "employee_id": "E100",
+    "status": "SUCCESS",
+    "details": {
+      "username": "abdul.aziz",
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.766890Z",
+    "action": "CREATE",
+    "employee_id": "E101",
+    "status": "SUCCESS",
+    "details": {
+      "username": "nina.patel",
+      "job_title": "HR Specialist",
+      "department": "HR"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.767478Z",
+    "action": "CREATE",
+    "employee_id": "E101",
+    "status": "FAILED",
+    "details": {
+      "reason": "Employee ID 'E101' already exists."
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.769119Z",
+    "action": "CREATE",
+    "employee_id": "UNKNOWN",
+    "status": "FAILED",
+    "details": {
+      "reason": "Missing required fields: employee_id, last_name"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.771318Z",
+    "action": "CREATE",
+    "employee_id": "E102",
+    "status": "SUCCESS",
+    "details": {
+      "username": "abdul.aziz",
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.773642Z",
+    "action": "CREATE",
+    "employee_id": "E103",
+    "status": "SUCCESS",
+    "details": {
+      "username": "abdul.aziz",
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.774508Z",
+    "action": "CREATE",
+    "employee_id": "E104",
+    "status": "SUCCESS",
+    "details": {
+      "username": "abdul.aziz2",
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.776449Z",
+    "action": "CREATE",
+    "employee_id": "E105",
+    "status": "SUCCESS",
+    "details": {
+      "username": "sofia.lee",
+      "job_title": "Finance Analyst",
+      "department": "Finance"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.778400Z",
+    "action": "CREATE",
+    "employee_id": "E106",
+    "status": "FAILED",
+    "details": {
+      "reason": "Invalid job title 'Legal Consultant'."
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.780641Z",
+    "action": "CREATE",
+    "employee_id": "L001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "taylor.smith",
+      "job_title": "Help Desk Analyst",
+      "department": "Support"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.781457Z",
+    "action": "TERMINATE",
+    "employee_id": "L001",
+    "status": "SUCCESS",
+    "details": {
+      "job_title": "Help Desk Analyst",
+      "department": "Support"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.783594Z",
+    "action": "TERMINATE",
+    "employee_id": "NONEXISTENT",
+    "status": "FAILED",
+    "details": {
+      "reason": "Employee ID 'NONEXISTENT' not found."
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.785846Z",
+    "action": "CREATE",
+    "employee_id": "L001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "taylor.smith",
+      "job_title": "Software Developer",
+      "department": "Support"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.786668Z",
+    "action": "TERMINATE",
+    "employee_id": "L001",
+    "status": "SUCCESS",
+    "details": {
+      "job_title": "Software Developer",
+      "department": "Support"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.789985Z",
+    "action": "CREATE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "alex.morgan",
+      "job_title": "Help Desk Analyst",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.790903Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "old_job_title": "Help Desk Analyst",
+      "new_job_title": "IAM Analyst"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.792756Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "NONEXIST",
+    "status": "FAILED",
+    "details": {
+      "reason": "Employee ID 'NONEXIST' not found."
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.794918Z",
+    "action": "CREATE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "alex.morgan",
+      "job_title": "Help Desk Analyst",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.795891Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "M001",
+    "status": "FAILED",
+    "details": {
+      "reason": "Invalid job title 'Legal Consultant'."
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.798145Z",
+    "action": "CREATE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "alex.morgan",
+      "job_title": "Help Desk Analyst",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.799995Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "old_job_title": "Help Desk Analyst",
+      "new_job_title": "IAM Analyst"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.802331Z",
+    "action": "CREATE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "alex.morgan",
+      "job_title": "Software Developer",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-18T01:41:27.803334Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "M001",
+    "status": "SUCCESS",
+    "details": {
+      "old_job_title": "Software Developer",
+      "new_job_title": "Security Analyst"
+    }
+  }
+]
