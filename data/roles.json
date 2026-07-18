@@ -1,0 +1,60 @@
+{
+  "Help Desk Analyst": {
+    "groups": ["helpdesk"],
+    "applications": ["ticketing_system"],
+    "permissions": [
+      "tickets:view",
+      "tickets:update_status",
+      "tickets:add_internal_note",
+      "users:reset_password_limited"
+    ]
+  },
+  "IAM Analyst": {
+    "groups": ["iam_team"],
+    "applications": ["iam_console", "ticketing_system"],
+    "permissions": [
+      "iam:users:view",
+      "iam:users:provision_limited",
+      "iam:users:deprovision_limited",
+      "iam:access:attestation_review"
+    ]
+  },
+  "Security Analyst": {
+    "groups": ["security"],
+    "applications": ["siem", "incident_response_tool"],
+    "permissions": [
+      "security:alerts:view",
+      "security:alerts:acknowledge",
+      "security:logs:view",
+      "security:reports:export"
+    ]
+  },
+  "Finance Analyst": {
+    "groups": ["finance"],
+    "applications": ["finance_ledger", "expense_portal"],
+    "permissions": [
+      "finance:transactions:view",
+      "finance:reports:run",
+      "finance:reports:export_limited"
+    ]
+  },
+  "HR Specialist": {
+    "groups": ["hr"],
+    "applications": ["hris", "onboarding_portal"],
+    "permissions": [
+      "hr:employee:view",
+      "hr:employee:update_contact",
+      "hr:onboarding:manage_limited"
+    ]
+  },
+  "Software Developer": {
+    "groups": ["engineering"],
+    "applications": ["code_repo", "ci_system", "dev_aws_account"],
+    "permissions": [
+      "repo:read",
+      "repo:write_own_branch",
+      "ci:trigger_builds",
+      "infrastructure:deploy_dev_only"
+    ]
+  }
+}
