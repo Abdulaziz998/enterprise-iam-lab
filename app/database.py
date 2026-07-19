@@ -1,6 +1,6 @@
 import sqlite3
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, List, Optional
 
 from app.models import Employee
 
@@ -150,3 +150,40 @@ class Database:
         self.close()
 
         return {"success": True, "message": f"Employee '{employee_id}' terminated successfully."}
+
+    def get_all_employees(self) -> List[Dict[str, Any]]:
+        """Retrieve all employees from the SQLite database as a list of dictionaries."""
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        conn = self.connect()
+        cursor = conn.cursor()
+        self._ensure_table(cursor)
+
+        cursor.execute(
+            """
+            SELECT employee_id, first_name, last_name, department, job_title, manager, status, username
+            FROM employees
+            ORDER BY employee_id
+            """
+        )
+        rows = cursor.fetchall()
+        self.close()
+
+        if not rows:
+            return []
+
+        employees = []
+        for row in rows:
+            employees.append(
+                {
+                    "employee_id": row[0],
+                    "first_name": row[1],
+                    "last_name": row[2],
+                    "department": row[3],
+                    "job_title": row[4],
+                    "manager": row[5],
+                    "status": row[6],
+                    "username": row[7],
+                }
+            )
+
+        return employees
