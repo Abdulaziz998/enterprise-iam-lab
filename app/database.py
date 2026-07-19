@@ -24,11 +24,8 @@ class Database:
             self.connection.close()
             self.connection = None
 
-    def initialize(self) -> None:
-        """Create the SQLite database and the employees table."""
-        self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        conn = self.connect()
-        cursor = conn.cursor()
+    def _ensure_table(self, cursor: sqlite3.Cursor) -> None:
+        """Ensure the employees table exists in the SQLite database."""
         cursor.execute(
             """
             CREATE TABLE IF NOT EXISTS employees (
@@ -43,6 +40,13 @@ class Database:
             )
             """
         )
+
+    def initialize(self) -> None:
+        """Create the SQLite database and the employees table."""
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        conn = self.connect()
+        cursor = conn.cursor()
+        self._ensure_table(cursor)
         conn.commit()
         self.close()
 
@@ -51,20 +55,7 @@ class Database:
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         conn = self.connect()
         cursor = conn.cursor()
-        cursor.execute(
-            """
-            CREATE TABLE IF NOT EXISTS employees (
-                employee_id TEXT PRIMARY KEY,
-                first_name TEXT,
-                last_name TEXT,
-                department TEXT,
-                job_title TEXT,
-                manager TEXT,
-                status TEXT,
-                username TEXT
-            )
-            """
-        )
+        self._ensure_table(cursor)
 
         try:
             cursor.execute(
@@ -110,20 +101,7 @@ class Database:
         """Update employee role fields in the SQLite employees table."""
         conn = self.connect()
         cursor = conn.cursor()
-        cursor.execute(
-            """
-            CREATE TABLE IF NOT EXISTS employees (
-                employee_id TEXT PRIMARY KEY,
-                first_name TEXT,
-                last_name TEXT,
-                department TEXT,
-                job_title TEXT,
-                manager TEXT,
-                status TEXT,
-                username TEXT
-            )
-            """
-        )
+        self._ensure_table(cursor)
 
         cursor.execute(
             "SELECT employee_id FROM employees WHERE employee_id = ?",
@@ -145,3 +123,30 @@ class Database:
         self.close()
 
         return {"success": True, "message": f"Employee '{employee_id}' updated successfully."}
+
+    def terminate_employee(self, employee_id: str, new_status: str) -> dict:
+        """Terminate an employee by updating their status in SQLite."""
+        conn = self.connect()
+        cursor = conn.cursor()
+        self._ensure_table(cursor)
+
+        cursor.execute(
+            "SELECT employee_id FROM employees WHERE employee_id = ?",
+            (employee_id,),
+        )
+        if cursor.fetchone() is None:
+            self.close()
+            return {"success": False, "message": f"Employee ID '{employee_id}' not found."}
+
+        cursor.execute(
+            """
+            UPDATE employees
+            SET status = ?
+            WHERE employee_id = ?
+            """,
+            (new_status, employee_id),
+        )
+        conn.commit()
+        self.close()
+
+        return {"success": True, "message": f"Employee '{employee_id}' terminated successfully."}
