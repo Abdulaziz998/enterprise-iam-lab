@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from app.audit import AuditLogger
+from app.database import Database
 from app.models import Employee
 
 
@@ -15,11 +16,14 @@ class IAMService:
         employees_path: Optional[str] = None,
         roles_path: Optional[str] = None,
         audit_log_path: Optional[str] = None,
+        db_path: Optional[str] = None,
     ):
         repo_root = Path(__file__).resolve().parents[1]
         self.employees_path = Path(employees_path) if employees_path else repo_root / "data" / "employees.json"
         self.roles_path = Path(roles_path) if roles_path else repo_root / "data" / "roles.json"
         self.audit_logger = AuditLogger(audit_log_path)
+        default_db_path = self.employees_path.parent / "iam.db"
+        self.database = Database(db_path if db_path else str(default_db_path))
 
     def create_employee(self, employee: Employee) -> Dict[str, Any]:
         """Create a new employee record for the Joiner workflow."""
@@ -72,6 +76,20 @@ class IAMService:
 
         employees.append(employee.to_dict())
         self._save_employees(employees)
+
+        sqlite_result = self.database.insert_employee(employee)
+        if not sqlite_result.get("success", False):
+            error_msg = sqlite_result.get("message", "Failed to save employee to SQLite.")
+            self.audit_logger.log_event(
+                action="CREATE",
+                employee_id=employee.employee_id,
+                status="FAILED",
+                details={"reason": error_msg},
+            )
+            return {
+                "success": False,
+                "message": error_msg,
+            }
 
         self.audit_logger.log_event(
             action="CREATE",
