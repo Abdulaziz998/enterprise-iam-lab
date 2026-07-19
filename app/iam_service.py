@@ -221,6 +221,22 @@ class IAMService:
         # Persist changes
         self._save_employees(employees)
 
+        sqlite_result = self.database.update_employee_role(
+            employee_id=employee_id,
+            new_job_title=new_job_title,
+            new_status=target.get("status", "active"),
+            new_username=target.get("username"),
+        )
+        if not sqlite_result.get("success", False):
+            error_msg = sqlite_result.get("message", "Failed to update employee role in SQLite.")
+            self.audit_logger.log_event(
+                action="UPDATE_ROLE",
+                employee_id=employee_id,
+                status="FAILED",
+                details={"reason": error_msg},
+            )
+            return {"success": False, "message": error_msg}
+
         self.audit_logger.log_event(
             action="UPDATE_ROLE",
             employee_id=employee_id,

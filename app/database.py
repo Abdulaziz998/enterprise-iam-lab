@@ -105,3 +105,43 @@ class Database:
             "success": True,
             "message": f"Employee '{employee.employee_id}' inserted successfully.",
         }
+
+    def update_employee_role(self, employee_id: str, new_job_title: str, new_status: str, new_username: str) -> dict:
+        """Update employee role fields in the SQLite employees table."""
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS employees (
+                employee_id TEXT PRIMARY KEY,
+                first_name TEXT,
+                last_name TEXT,
+                department TEXT,
+                job_title TEXT,
+                manager TEXT,
+                status TEXT,
+                username TEXT
+            )
+            """
+        )
+
+        cursor.execute(
+            "SELECT employee_id FROM employees WHERE employee_id = ?",
+            (employee_id,),
+        )
+        if cursor.fetchone() is None:
+            self.close()
+            return {"success": False, "message": f"Employee ID '{employee_id}' not found."}
+
+        cursor.execute(
+            """
+            UPDATE employees
+            SET job_title = ?, status = ?, username = ?
+            WHERE employee_id = ?
+            """,
+            (new_job_title, new_status, new_username, employee_id),
+        )
+        conn.commit()
+        self.close()
+
+        return {"success": True, "message": f"Employee '{employee_id}' updated successfully."}
