@@ -54,6 +54,10 @@ class AuditLogger:
 
         return data if isinstance(data, list) else []
 
+    def get_events(self) -> List[Dict[str, Any]]:
+        """Load audit events from the configured audit log."""
+        return self._load_audit_log()
+
     def _save_audit_log(self, logs: List[Dict[str, Any]]) -> None:
         """Save audit logs back to the JSON file."""
         self.audit_log_path.parent.mkdir(parents=True, exist_ok=True)
