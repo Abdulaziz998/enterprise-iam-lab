@@ -187,3 +187,35 @@ class Database:
             )
 
         return employees
+
+    def get_employee_by_id(self, employee_id: str) -> Optional[Dict[str, Any]]:
+        """Retrieve one employee by employee_id from the SQLite database."""
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        conn = self.connect()
+        cursor = conn.cursor()
+        self._ensure_table(cursor)
+
+        cursor.execute(
+            """
+            SELECT employee_id, first_name, last_name, department, job_title, manager, status, username
+            FROM employees
+            WHERE employee_id = ?
+            """,
+            (employee_id,),
+        )
+        row = cursor.fetchone()
+        self.close()
+
+        if row is None:
+            return None
+
+        return {
+            "employee_id": row[0],
+            "first_name": row[1],
+            "last_name": row[2],
+            "department": row[3],
+            "job_title": row[4],
+            "manager": row[5],
+            "status": row[6],
+            "username": row[7],
+        }

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 from app.database import Database
 from app.iam_service import IAMService
@@ -28,6 +29,24 @@ def get_employees():
         "success": True,
         "count": len(employees),
         "employees": employees,
+    }
+
+
+@app.get("/employees/{employee_id}")
+def get_employee_by_id(employee_id: str):
+    employee = database.get_employee_by_id(employee_id)
+    if employee is None:
+        return JSONResponse(
+            status_code=404,
+            content={
+                "success": False,
+                "message": "Employee not found.",
+            },
+        )
+
+    return {
+        "success": True,
+        "employee": employee,
     }
 
 
