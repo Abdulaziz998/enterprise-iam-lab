@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -133,6 +135,68 @@ def terminate_employee(employee_id: str):
         "success": True,
         "message": result.get("message"),
         "employee": result.get("employee"),
+    }
+
+
+@app.get("/audit-logs")
+def get_audit_logs(action: Optional[str] = None, status: Optional[str] = None, employee_id: Optional[str] = None):
+    events = service.audit_logger.get_events()
+
+    if action:
+        action_lower = action.lower()
+        events = [event for event in events if event.get("action", "").lower() == action_lower]
+
+    if status:
+        status_lower = status.lower()
+        events = [event for event in events if event.get("status", "").lower() == status_lower]
+
+    if employee_id:
+        events = [event for event in events if event.get("employee_id") == employee_id]
+
+    return {
+        "success": True,
+        "count": len(events),
+        "events": events,
+    }
+
+
+@app.get("/roles")
+def get_roles():
+    roles_data = service._load_roles()
+    roles = [
+        {
+            "job_title": title,
+            "groups": details.get("groups", []),
+            "applications": details.get("applications", []),
+        }
+        for title, details in sorted(roles_data.items(), key=lambda item: item[0])
+    ]
+
+    return {
+        "success": True,
+        "count": len(roles),
+        "roles": roles,
+    }
+
+
+@app.get("/roles/{job_title}")
+def get_role_by_title(job_title: str):
+    roles_data = service._load_roles()
+    role_definition = roles_data.get(job_title)
+
+    if role_definition is None:
+        return JSONResponse(
+            status_code=404,
+            content={"success": False, "message": "Role not found."},
+        )
+
+    return {
+        "success": True,
+        "role": {
+            "job_title": job_title,
+            "groups": role_definition.get("groups", []),
+            "applications": role_definition.get("applications", []),
+        },
     }
 
 
