@@ -219,3 +219,42 @@ class Database:
             "status": row[6],
             "username": row[7],
         }
+
+    def update_employee(
+        self,
+        employee_id: str,
+        first_name: str,
+        last_name: str,
+        department: str,
+        job_title: str,
+        manager: str,
+        status: str,
+        username: str,
+    ) -> dict:
+        """Update all fields of an existing employee in the SQLite database."""
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        conn = self.connect()
+        cursor = conn.cursor()
+        self._ensure_table(cursor)
+
+        cursor.execute(
+            "SELECT employee_id FROM employees WHERE employee_id = ?",
+            (employee_id,),
+        )
+        if cursor.fetchone() is None:
+            self.close()
+            return {"success": False, "message": f"Employee ID '{employee_id}' not found."}
+
+        cursor.execute(
+            """
+            UPDATE employees
+            SET first_name = ?, last_name = ?, department = ?, job_title = ?, 
+                manager = ?, status = ?, username = ?
+            WHERE employee_id = ?
+            """,
+            (first_name, last_name, department, job_title, manager, status, username, employee_id),
+        )
+        conn.commit()
+        self.close()
+
+        return {"success": True, "message": f"Employee '{employee_id}' updated successfully."}
