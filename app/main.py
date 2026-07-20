@@ -50,6 +50,37 @@ def get_employee_by_id(employee_id: str):
     }
 
 
+@app.put("/employees/{employee_id}")
+def update_employee(employee_id: str, employee: Employee):
+    update_result = database.update_employee(
+        employee_id=employee_id,
+        first_name=employee.first_name,
+        last_name=employee.last_name,
+        department=employee.department,
+        job_title=employee.job_title,
+        manager=employee.manager,
+        status=employee.status,
+        username=employee.username,
+    )
+
+    if not update_result.get("success", False):
+        return JSONResponse(
+            status_code=404,
+            content={
+                "success": False,
+                "message": "Employee not found.",
+            },
+        )
+
+    updated_employee = database.get_employee_by_id(employee_id)
+
+    return {
+        "success": True,
+        "message": "Employee updated successfully.",
+        "employee": updated_employee,
+    }
+
+
 @app.post("/employees")
 def create_employee(employee: Employee):
     return service.create_employee(employee)
