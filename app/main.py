@@ -120,6 +120,22 @@ def move_employee(employee_id: str, payload: MoveEmployeeRequest):
     }
 
 
+@app.post("/employees/{employee_id}/terminate")
+def terminate_employee(employee_id: str):
+    result = service.terminate_employee(employee_id)
+    if not result.get("success", False):
+        return JSONResponse(
+            status_code=404,
+            content={"success": False, "message": result.get("message")},
+        )
+
+    return {
+        "success": True,
+        "message": result.get("message"),
+        "employee": result.get("employee"),
+    }
+
+
 @app.post("/employees")
 def create_employee(employee: Employee):
     return service.create_employee(employee)
