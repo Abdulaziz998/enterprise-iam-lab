@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
-from app.database import Database
 from app.iam_service import IAMService
 from app.models import Employee
 
@@ -11,7 +11,11 @@ app = FastAPI(
 )
 
 service = IAMService()
-database = Database()
+database = service.database
+
+
+class MoveEmployeeRequest(BaseModel):
+    new_job_title: str
 
 
 @app.get("/")
@@ -96,6 +100,23 @@ def delete_employee(employee_id: str):
     return {
         "success": True,
         "message": "Employee deleted successfully.",
+    }
+
+
+@app.post("/employees/{employee_id}/move")
+def move_employee(employee_id: str, payload: MoveEmployeeRequest):
+    result = service.update_employee_role(employee_id, payload.new_job_title)
+
+    if not result.get("success", False):
+        message = result.get("message", "Employee not found.")
+        if "not found" in message.lower():
+            return JSONResponse(status_code=404, content={"success": False, "message": message})
+        return JSONResponse(status_code=400, content={"success": False, "message": message})
+
+    return {
+        "success": True,
+        "message": result.get("message"),
+        "employee": result.get("employee"),
     }
 
 
