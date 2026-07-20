@@ -258,3 +258,27 @@ class Database:
         self.close()
 
         return {"success": True, "message": f"Employee '{employee_id}' updated successfully."}
+
+    def delete_employee(self, employee_id: str) -> dict:
+        """Delete an existing employee from the SQLite database."""
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        conn = self.connect()
+        cursor = conn.cursor()
+        self._ensure_table(cursor)
+
+        cursor.execute(
+            "SELECT employee_id FROM employees WHERE employee_id = ?",
+            (employee_id,),
+        )
+        if cursor.fetchone() is None:
+            self.close()
+            return {"success": False, "message": "Employee not found."}
+
+        cursor.execute(
+            "DELETE FROM employees WHERE employee_id = ?",
+            (employee_id,),
+        )
+        conn.commit()
+        self.close()
+
+        return {"success": True, "message": "Employee deleted successfully."}
