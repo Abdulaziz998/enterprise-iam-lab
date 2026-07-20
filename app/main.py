@@ -81,6 +81,24 @@ def update_employee(employee_id: str, employee: Employee):
     }
 
 
+@app.delete("/employees/{employee_id}")
+def delete_employee(employee_id: str):
+    delete_result = database.delete_employee(employee_id)
+    if not delete_result.get("success", False):
+        return JSONResponse(
+            status_code=404,
+            content={
+                "success": False,
+                "message": "Employee not found.",
+            },
+        )
+
+    return {
+        "success": True,
+        "message": "Employee deleted successfully.",
+    }
+
+
 @app.post("/employees")
 def create_employee(employee: Employee):
     return service.create_employee(employee)
