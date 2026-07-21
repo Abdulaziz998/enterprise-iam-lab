@@ -2,6 +2,12 @@
 
 # Enterprise IAM Platform
 
+## 🌐 Live Demo
+
+**Live Application:** https://enterprise-iam-platform-lac.vercel.app
+
+**API Documentation:** https://enterprise-iam-api.onrender.com/docs
+
 ### Full-Stack Identity & Access Management (IAM) Platform
 
 Production-style IAM platform demonstrating Joiner, Mover, and Leaver (JML) workflows, Role-Based Access Control (RBAC), workforce analytics, authentication, audit logging, and persistent identity provisioning.
