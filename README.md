@@ -2,7 +2,18 @@
 
 > Full-Stack Identity & Access Management Platform built with FastAPI, React, SQLite, Docker, and GitHub Actions.
 
-Enterprise IAM is a production-style identity governance platform that automates Joiner, Mover, and Leaver workflows, role-based access control (RBAC), authentication, audit logging, and workforce lifecycle management.
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB)
+![SQLite](https://img.shields.io/badge/SQLite-Database-003B57)
+![Docker](https://img.shields.io/badge/Docker-Container-2496ED)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI/CD-2088FF)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Tests](https://img.shields.io/badge/Tests-100%2B_Passing-success)
+
+Enterprise IAM is a production-style identity administration lab for Joiner, Mover, and Leaver workflows. It combines a FastAPI backend, SQLite-backed employee persistence, audit logging, RBAC role definitions, and a React administration console.
+
+---
 
 ## Project Overview
 
