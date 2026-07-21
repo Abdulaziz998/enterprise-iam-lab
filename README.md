@@ -1,6 +1,6 @@
 # Enterprise IAM Platform
 
-> Full-Stack Identity & Access Management Platform built with FastAPI, React, SQLite, Docker, and GitHub Actions.
+> Full-Stack Identity & Access Management (IAM) platform built with **FastAPI, React, SQLite, Docker, and GitHub Actions**.
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-REST_API-009688)
@@ -11,82 +11,193 @@
 ![RBAC](https://img.shields.io/badge/RBAC-Implemented-success)
 ![IAM](https://img.shields.io/badge/Identity_Access_Management-Enterprise-blueviolet)
 ![Tests](https://img.shields.io/badge/Tests-100%2B-success)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-Enterprise IAM is a production-style identity administration lab for Joiner, Mover, and Leaver workflows. It combines a FastAPI backend, SQLite-backed employee persistence, audit logging, RBAC role definitions, and a React administration console.
+Enterprise IAM is a production-style Identity & Access Management platform that automates employee lifecycle management through **Joiner, Mover, and Leaver (JML)** workflows. It demonstrates RBAC provisioning, authentication, audit logging, workforce analytics, persistent data storage, and enterprise-style administration using a modern React frontend and FastAPI backend.
 
 ---
 
-## Project Overview
+# ✨ Features
 
-The platform models common IAM operations:
+- ✅ Authentication
+- ✅ Joiner (Employee Onboarding)
+- ✅ Mover (Role Changes)
+- ✅ Leaver (Employee Termination)
+- ✅ Role-Based Access Control (RBAC)
+- ✅ Employee Directory
+- ✅ Workforce Analytics Dashboard
+- ✅ Audit Logging
+- ✅ Global Employee Search
+- ✅ CSV Export
+- ✅ SQLite Persistent Storage
+- ✅ Docker Deployment
+- ✅ GitHub Actions CI/CD
+- ✅ 100+ Automated Backend Tests
 
-- Create employees and assign access from role definitions.
-- Move employees between roles while preserving identity fields.
-- Terminate employees by removing access and updating status.
-- Review employee records, role coverage, and audit events.
+---
 
-The project is designed for portfolio-quality engineering practice: tested backend workflows, a polished frontend console, Dockerized services, and CI checks.
+# 📸 Screenshots
 
-## Architecture
+### Login
+
+> *(Insert login screenshot here)*
+
+---
+
+### Dashboard
+
+> *(Insert dashboard screenshot here)*
+
+---
+
+### Employee Directory
+
+> *(Insert employee directory screenshot here)*
+
+---
+
+### Joiner Workflow
+
+> *(Insert create employee screenshot here)*
+
+---
+
+### Mover Workflow
+
+> *(Insert change role screenshot here)*
+
+---
+
+### Audit Logs
+
+> *(Insert audit logs screenshot here)*
+
+---
+
+# 🏗 Architecture
 
 ```
-React + Vite frontend  --->  FastAPI backend  --->  IAM service
-       |                         |                    |
-       |                         |                    +-- RBAC roles JSON
-       |                         |                    +-- audit log JSON
-       |                         |
-       |                         +-- SQLite employee database
-       |
-       +-- Nginx production container
+                    Browser
+                        │
+                        ▼
+               React + Vite Frontend
+                        │
+                   REST API (HTTP)
+                        ▼
+                  FastAPI Backend
+                        │
+          ┌─────────────┼─────────────┐
+          ▼             ▼             ▼
+     IAM Service     Audit Logs    SQLite
+                        │
+                        ▼
+                  Employee Records
 ```
 
-## Backend
+---
 
-The backend is a FastAPI service exposing existing IAM endpoints:
+# 🛠 Tech Stack
 
-- `GET /employees`
-- `GET /employees/{employee_id}`
-- `POST /employees`
-- `POST /employees/{employee_id}/move`
-- `POST /employees/{employee_id}/terminate`
-- `GET /roles`
-- `GET /audit-logs`
+| Layer | Technology |
+|--------|------------|
+| Frontend | React, Vite |
+| Backend | FastAPI |
+| Database | SQLite |
+| Authentication | Demo Authentication |
+| Authorization | RBAC |
+| Containerization | Docker |
+| CI/CD | GitHub Actions |
+| Testing | Pytest |
+| API | REST |
 
-Business logic lives in `app/iam_service.py`; API routing lives in `app/main.py`.
+---
 
-## Frontend
+# 📋 Project Overview
 
-The frontend is a React + Vite administration console in `frontend/`. It provides:
+The platform simulates common enterprise IAM operations.
 
-- Dashboard KPIs and operational panels.
-- Employee directory and detail drawer.
-- Create Employee, Change Role, and Terminate Employee workflows.
-- Role catalog and audit log views.
-- Toast notifications and production-style loading/error states.
+### Joiner
 
-Set the API URL with:
+- Create employee identities
+- Generate usernames
+- Assign RBAC roles
+- Provision groups
+- Provision applications
+
+### Mover
+
+- Change employee role
+- Remove previous permissions
+- Assign new permissions
+- Preserve identity information
+- Record audit event
+
+### Leaver
+
+- Disable employee
+- Remove group memberships
+- Remove application access
+- Update lifecycle status
+- Preserve audit history
+
+---
+
+# 🌐 REST API
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/employees` | List employees |
+| GET | `/employees/{employee_id}` | Employee details |
+| POST | `/employees` | Create employee |
+| POST | `/employees/{employee_id}/move` | Change employee role |
+| POST | `/employees/{employee_id}/terminate` | Terminate employee |
+| GET | `/roles` | List RBAC roles |
+| GET | `/audit-logs` | View audit events |
+
+Business logic lives in **app/iam_service.py** while API routing lives in **app/main.py**.
+
+---
+
+# 💻 Frontend
+
+The React administration console includes:
+
+- Executive Dashboard
+- Employee Directory
+- Employee Detail Drawer
+- Joiner Workflow
+- Mover Workflow
+- Leaver Workflow
+- Role Catalog
+- Audit Logs
+- Global Search
+- CSV Export
+- Responsive UI
+- Toast Notifications
+
+Configure the API:
 
 ```bash
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-See `frontend/.env.example`.
+---
 
-## Running Locally
+# 🚀 Running Locally
 
-Install backend dependencies:
+Install backend dependencies
 
 ```bash
 python3 -m pip install -r requirements.txt
 ```
 
-Run the API:
+Run FastAPI
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-Run the frontend:
+Run React
 
 ```bash
 cd frontend
@@ -94,82 +205,105 @@ npm install
 npm run dev
 ```
 
-Open:
+Open
 
-- Frontend: `http://localhost:5173`
-- API docs: `http://localhost:8000/docs`
+- Frontend → http://localhost:5173
+- API Docs → http://localhost:8000/docs
 
-## Docker
+---
 
-Build and run both services:
+# 🐳 Docker
+
+Run both services
 
 ```bash
 docker compose up --build
 ```
 
-Services:
+Services
 
-- Backend: `http://localhost:8000`
-- Frontend: `http://localhost:3000`
+- Frontend → http://localhost:3000
+- Backend → http://localhost:8000
 
-The frontend production build is served by Nginx. The Vite API base URL is injected at build time through `VITE_API_BASE_URL`.
+---
 
-## Running Tests
+# ✅ Testing
 
-Backend tests:
+Backend
 
 ```bash
 python3 -m pytest -q
 ```
 
-Frontend production build:
+Current Status
 
-```bash
-cd frontend
-npm install
-npm run build
-```
+- ✅ 100+ Backend Tests Passing
+- ✅ Production Frontend Build Passing
+- ✅ GitHub Actions CI/CD
+- ✅ SQLite Persistence Verified
 
-## CI/CD
+---
 
-GitHub Actions runs on `push` and `pull_request`.
+# ⚙️ CI/CD
 
-Pipeline jobs:
+GitHub Actions automatically executes on every Push and Pull Request.
 
-- Backend: install Python dependencies and run `python3 -m pytest -q`.
-- Frontend: install Node dependencies and run `npm run build`.
+Pipeline
 
-## Folder Structure
+- Install Python dependencies
+- Execute backend test suite
+- Install frontend dependencies
+- Generate production React build
+
+---
+
+# 📁 Folder Structure
 
 ```
 enterprise-iam-lab/
-├── app/                      # FastAPI routes and IAM business logic
-├── data/                     # Roles, employees, audit data
-├── docs/                     # Architecture notes
-├── frontend/                 # React + Vite admin console
-│   ├── src/
-│   ├── Dockerfile
-│   ├── nginx.conf
-│   └── .env.example
-├── tests/                    # Pytest backend test suite
-├── Dockerfile                # Backend container
-├── docker-compose.yml        # Backend + frontend services
+├── app/
+├── frontend/
+├── tests/
+├── docs/
+├── data/
+├── Dockerfile
+├── docker-compose.yml
 ├── requirements.txt
 └── README.md
 ```
 
-## Screenshots
+---
 
-Placeholder for dashboard, employee drawer, role catalog, and audit log screenshots.
+# 🚧 Roadmap
 
-## Future Roadmap
+- [x] Joiner Workflow
+- [x] Mover Workflow
+- [x] Leaver Workflow
+- [x] RBAC Provisioning
+- [x] Authentication
+- [x] Workforce Analytics
+- [x] Audit Logging
+- [x] Global Search
+- [x] CSV Export
+- [ ] Microsoft Entra ID Integration
+- [ ] Okta API Integration
+- [ ] SCIM Provisioning
+- [ ] Multi-Factor Authentication
+- [ ] Access Review Campaigns
+- [ ] Approval Workflows
+- [ ] Live Cloud Deployment
 
-- Add seeded demo data reset workflow.
-- Add API-level authentication and admin roles.
-- Add deployment manifests for cloud environments.
-- Add structured audit export and retention controls.
-- Integrate with Microsoft Entra ID or Okta sandbox tenants.
+---
 
-## License
+# 👨‍💻 Author
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+**Abdulaziz Abdi**
+
+- LinkedIn: https://linkedin.com/in/abdulaziz-abdi
+- GitHub: https://github.com/Abdulaziz998
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
