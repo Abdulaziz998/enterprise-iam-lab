@@ -1,0 +1,9 @@
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; }
+body { margin: 0; background: var(--page-bg); color: var(--text-primary); font-family: var(--font); line-height: 1.45; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 0.62; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, tr:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
+button:active, a:active { transform: translateY(1px); }
+::selection { background: rgba(37, 99, 235, 0.18); }
