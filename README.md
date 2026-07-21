@@ -19,6 +19,10 @@ Production-style IAM platform demonstrating Joiner, Mover, and Leaver (JML) work
 
 </div>
 
+<p align="center">
+  <img src="images/enterprise-iam-demo.gif" alt="Enterprise IAM Demo" width="100%">
+</p>
+
 ---
 
 # Enterprise Overview
