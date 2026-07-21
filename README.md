@@ -1,156 +1,160 @@
-# Enterprise IAM Lifecycle Lab
+# Enterprise IAM Platform
 
-A lightweight, educational portfolio project exploring Identity and Access Management (IAM) lifecycles and Role-Based Access Control (RBAC) in an enterprise context.
+Enterprise IAM is a production-style identity administration lab for Joiner, Mover, and Leaver workflows. It combines a FastAPI backend, SQLite-backed employee persistence, audit logging, RBAC role definitions, and a React administration console.
 
-## Features
+## Project Overview
 
-### ✅ Completed
+The platform models common IAM operations:
 
-- [x] Employee Identity Model (Python dataclasses)
-- [x] Joiner Workflow (account provisioning)
-- [x] Mover Workflow (role transitions)
-- [x] Leaver Workflow (account termination)
-- [x] RBAC Role Assignment
-- [x] Automatic Username Generation
-- [x] Audit Logging (event tracking)
-- [x] Automated Testing (pytest)
+- Create employees and assign access from role definitions.
+- Move employees between roles while preserving identity fields.
+- Terminate employees by removing access and updating status.
+- Review employee records, role coverage, and audit events.
 
-### 🔄 Planned
+The project is designed for portfolio-quality engineering practice: tested backend workflows, a polished frontend console, Dockerized services, and CI checks.
 
-- [ ] SQLite Database
-- [ ] FastAPI REST API
-- [ ] Microsoft Entra ID Integration
-- [ ] Okta Integration
-- [ ] Web Dashboard
-
-## What is Identity and Access Management (IAM)?
-
-Identity and Access Management (IAM) is the practice and set of systems that ensure the right people have the right access to the right resources at the right time. IAM covers provisioning and deprovisioning accounts, enforcing authentication and authorization policies, and maintaining an inventory of who can access what.
-
-## Joiner, Mover, Leaver (JML)
-
-- Joiner: When a new employee or contractor is onboarded. The JML process provisions accounts, assigns initial roles, and grants baseline access required to start work.
-- Mover: When an existing person changes jobs, teams, or responsibilities. The Mover process updates access to reflect their new role and removes access no longer needed.
-- Leaver: When a person exits the organisation. The Leaver process revokes access, archives accounts, and records the change for audits.
-
-These three stages together ensure access continuously matches an individual’s employment status and role.
-
-## What is Role-Based Access Control (RBAC)?
-
-RBAC assigns permissions to roles rather than to individual users. Users are added to roles (or groups) and inherit the permissions of that role. This simplifies administration and helps enforce consistent access policies.
-
-## Why Least Privilege Matters
-
-Least privilege means granting users only the permissions they need to perform their tasks—and no more. Benefits:
-
-- Reduces blast radius if an account is compromised
-- Limits accidental misuse of powerful features
-- Simplifies audits by narrowing required controls
-
-Our sample roles follow least-privilege principles and avoid any unrestricted "administrator" role.
-
-## Why Audit Logs Matter
-
-Audit logs record who did what and when. They are essential for:
-
-- Investigating incidents
-- Proving compliance
-- Tracking changes to sensitive access
-
-Audit logs should be tamper-evident, retained according to policy, and easily searchable by security and compliance teams.
-
-## Technologies Used
-
-- **Python 3.9+** – Core language for IAM logic and testing
-- **pytest** – Automated testing framework
-- **Git** – Version control
-- **GitHub** – Source code hosting and collaboration
-- **JSON** – Data serialization (roles, employees, audit logs)
-
-## Project Structure
+## Architecture
 
 ```
-enterprise-iam-lab/
-├── README.md                  # Project overview
-├── CHANGELOG.md               # Detailed sprint history
-├── LICENSE                    # MIT License
-├── .gitignore                 # Git exclusions
-├── requirements.txt           # Python dependencies
-│
-├── docs/
-│   └── architecture.md        # System design and flow diagram
-│
-├── data/
-│   ├── roles.json             # Role definitions (groups, apps, permissions)
-│   ├── employees.json         # Employee records (Joiner/Mover/Leaver outcomes)
-│   └── audit_log.json         # Audit events for compliance tracking
-│
-├── app/
-│   ├── models.py              # Employee dataclass
-│   ├── iam_service.py         # IAM business logic (create, update, terminate)
-│   ├── audit.py               # Audit logging
-│   └── demo.py                # Manual workflow demonstration
-│
-├── tests/
-│   ├── test_models.py         # Employee model tests
-│   ├── test_joiner.py         # Joiner workflow tests
-│   ├── test_mover.py          # Mover workflow tests
-│   ├── test_leaver.py         # Leaver workflow tests
-│   └── test_audit.py          # Audit logging tests
-│
-└── screenshots/               # Demo images and diagrams (placeholder)
+React + Vite frontend  --->  FastAPI backend  --->  IAM service
+       |                         |                    |
+       |                         |                    +-- RBAC roles JSON
+       |                         |                    +-- audit log JSON
+       |                         |
+       |                         +-- SQLite employee database
+       |
+       +-- Nginx production container
 ```
 
-## Future Roadmap
+## Backend
 
-### Near Term
+The backend is a FastAPI service exposing existing IAM endpoints:
 
-- **SQLite Database Integration** – Replace JSON files with persistent relational storage
-- **FastAPI REST API** – Expose Joiner/Mover/Leaver workflows via HTTP endpoints
-- **Web Dashboard** – Simple UI for viewing employees, roles, and audit logs
+- `GET /employees`
+- `GET /employees/{employee_id}`
+- `POST /employees`
+- `POST /employees/{employee_id}/move`
+- `POST /employees/{employee_id}/terminate`
+- `GET /roles`
+- `GET /audit-logs`
 
-### Medium Term
+Business logic lives in `app/iam_service.py`; API routing lives in `app/main.py`.
 
-- **Microsoft Entra ID Integration** – Sync with Azure AD for real-world scenarios
-- **Okta Integration** – Connect to Okta for cross-platform identity management
-- **CI/CD Pipeline** – GitHub Actions for automated testing and deployment
+## Frontend
 
-### Long Term
+The frontend is a React + Vite administration console in `frontend/`. It provides:
 
-- **Docker Containerization** – Package as container for local and cloud deployment
-- **Policy Engine** – Advanced RBAC rules and conditional access
-- **Data Retention & Compliance** – Audit log archival, GDPR/HIPAA audit trails
+- Dashboard KPIs and operational panels.
+- Employee directory and detail drawer.
+- Create Employee, Change Role, and Terminate Employee workflows.
+- Role catalog and audit log views.
+- Toast notifications and production-style loading/error states.
 
----
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.9 or later
-- pip (Python package manager)
-
-### Installation
+Set the API URL with:
 
 ```bash
-git clone https://github.com/yourusername/enterprise-iam-lab.git
-cd enterprise-iam-lab
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+See `frontend/.env.example`.
+
+## Running Locally
+
+Install backend dependencies:
+
+```bash
 python3 -m pip install -r requirements.txt
 ```
 
-### Run Tests
+Run the API:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Run the frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open:
+
+- Frontend: `http://localhost:5173`
+- API docs: `http://localhost:8000/docs`
+
+## Docker
+
+Build and run both services:
+
+```bash
+docker compose up --build
+```
+
+Services:
+
+- Backend: `http://localhost:8000`
+- Frontend: `http://localhost:3000`
+
+The frontend production build is served by Nginx. The Vite API base URL is injected at build time through `VITE_API_BASE_URL`.
+
+## Running Tests
+
+Backend tests:
 
 ```bash
 python3 -m pytest -q
 ```
 
-### Manual Demo
+Frontend production build:
 
 ```bash
-python3 app/demo.py
+cd frontend
+npm install
+npm run build
 ```
 
----
+## CI/CD
+
+GitHub Actions runs on `push` and `pull_request`.
+
+Pipeline jobs:
+
+- Backend: install Python dependencies and run `python3 -m pytest -q`.
+- Frontend: install Node dependencies and run `npm run build`.
+
+## Folder Structure
+
+```
+enterprise-iam-lab/
+├── app/                      # FastAPI routes and IAM business logic
+├── data/                     # Roles, employees, audit data
+├── docs/                     # Architecture notes
+├── frontend/                 # React + Vite admin console
+│   ├── src/
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   └── .env.example
+├── tests/                    # Pytest backend test suite
+├── Dockerfile                # Backend container
+├── docker-compose.yml        # Backend + frontend services
+├── requirements.txt
+└── README.md
+```
+
+## Screenshots
+
+Placeholder for dashboard, employee drawer, role catalog, and audit log screenshots.
+
+## Future Roadmap
+
+- Add seeded demo data reset workflow.
+- Add API-level authentication and admin roles.
+- Add deployment manifests for cloud environments.
+- Add structured audit export and retention controls.
+- Integrate with Microsoft Entra ID or Okta sandbox tenants.
 
 ## License
 
