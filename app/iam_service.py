@@ -226,6 +226,8 @@ class IAMService:
             new_job_title=new_job_title,
             new_status=target.get("status", "active"),
             new_username=target.get("username"),
+            groups=target.get("groups", []),
+            applications=target.get("applications", []),
         )
         if not sqlite_result.get("success", False):
             error_msg = sqlite_result.get("message", "Failed to update employee role in SQLite.")

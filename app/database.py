@@ -1,3 +1,4 @@
+import json
 import sqlite3
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -36,10 +37,30 @@ class Database:
                 job_title TEXT,
                 manager TEXT,
                 status TEXT,
-                username TEXT
+                username TEXT,
+                groups TEXT DEFAULT '[]',
+                applications TEXT DEFAULT '[]'
             )
             """
         )
+        cursor.execute("PRAGMA table_info(employees)")
+        existing_columns = {row[1] for row in cursor.fetchall()}
+        if "groups" not in existing_columns:
+            cursor.execute("ALTER TABLE employees ADD COLUMN groups TEXT DEFAULT '[]'")
+        if "applications" not in existing_columns:
+            cursor.execute("ALTER TABLE employees ADD COLUMN applications TEXT DEFAULT '[]'")
+
+    def _encode_list(self, values: List[str]) -> str:
+        return json.dumps(list(values or []))
+
+    def _decode_list(self, value: Any) -> List[str]:
+        if value in (None, ""):
+            return []
+        try:
+            decoded = json.loads(value)
+        except (TypeError, json.JSONDecodeError):
+            return []
+        return decoded if isinstance(decoded, list) else []
 
     def initialize(self) -> None:
         """Create the SQLite database and the employees table."""
@@ -68,8 +89,10 @@ class Database:
                     job_title,
                     manager,
                     status,
-                    username
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    username,
+                    groups,
+                    applications
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     employee.employee_id,
@@ -80,6 +103,8 @@ class Database:
                     employee.manager,
                     employee.status,
                     employee.username,
+                    self._encode_list(employee.groups),
+                    self._encode_list(employee.applications),
                 ),
             )
             conn.commit()
@@ -97,7 +122,15 @@ class Database:
             "message": f"Employee '{employee.employee_id}' inserted successfully.",
         }
 
-    def update_employee_role(self, employee_id: str, new_job_title: str, new_status: str, new_username: str) -> dict:
+    def update_employee_role(
+        self,
+        employee_id: str,
+        new_job_title: str,
+        new_status: str,
+        new_username: str,
+        groups: Optional[List[str]] = None,
+        applications: Optional[List[str]] = None,
+    ) -> dict:
         """Update employee role fields in the SQLite employees table."""
         conn = self.connect()
         cursor = conn.cursor()
@@ -114,10 +147,17 @@ class Database:
         cursor.execute(
             """
             UPDATE employees
-            SET job_title = ?, status = ?, username = ?
+            SET job_title = ?, status = ?, username = ?, groups = ?, applications = ?
             WHERE employee_id = ?
             """,
-            (new_job_title, new_status, new_username, employee_id),
+            (
+                new_job_title,
+                new_status,
+                new_username,
+                self._encode_list(groups or []),
+                self._encode_list(applications or []),
+                employee_id,
+            ),
         )
         conn.commit()
         self.close()
@@ -141,10 +181,10 @@ class Database:
         cursor.execute(
             """
             UPDATE employees
-            SET status = ?
+            SET status = ?, groups = ?, applications = ?
             WHERE employee_id = ?
             """,
-            (new_status, employee_id),
+            (new_status, self._encode_list([]), self._encode_list([]), employee_id),
         )
         conn.commit()
         self.close()
@@ -160,7 +200,7 @@ class Database:
 
         cursor.execute(
             """
-            SELECT employee_id, first_name, last_name, department, job_title, manager, status, username
+            SELECT employee_id, first_name, last_name, department, job_title, manager, status, username, groups, applications
             FROM employees
             ORDER BY employee_id
             """
@@ -183,6 +223,8 @@ class Database:
                     "manager": row[5],
                     "status": row[6],
                     "username": row[7],
+                    "groups": self._decode_list(row[8]),
+                    "applications": self._decode_list(row[9]),
                 }
             )
 
@@ -197,7 +239,7 @@ class Database:
 
         cursor.execute(
             """
-            SELECT employee_id, first_name, last_name, department, job_title, manager, status, username
+            SELECT employee_id, first_name, last_name, department, job_title, manager, status, username, groups, applications
             FROM employees
             WHERE employee_id = ?
             """,
@@ -218,6 +260,8 @@ class Database:
             "manager": row[5],
             "status": row[6],
             "username": row[7],
+            "groups": self._decode_list(row[8]),
+            "applications": self._decode_list(row[9]),
         }
 
     def update_employee(

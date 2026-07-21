@@ -122,8 +122,12 @@ def test_get_all_employees_contains_all_fields(tmp_path):
         "manager",
         "status",
         "username",
+        "groups",
+        "applications",
     }
     assert set(emp_dict.keys()) == required_fields
+    assert emp_dict["groups"] == []
+    assert emp_dict["applications"] == []
 
 
 def test_get_all_employees_ordered_by_employee_id(tmp_path):

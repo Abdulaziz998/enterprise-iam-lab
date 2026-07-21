@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
@@ -12,6 +13,16 @@ app = FastAPI(
     version="1.0.0",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 service = IAMService()
 database = service.database
 
@@ -20,11 +31,54 @@ class MoveEmployeeRequest(BaseModel):
     new_job_title: str
 
 
+DEMO_EMPLOYEES = [
+    Employee("D1001", "Amina", "Hassan", "Engineering", "Software Developer", "Maya Chen", "active"),
+    Employee("D1002", "Noah", "Reed", "Security", "Security Analyst", "Priya Shah", "active"),
+    Employee("D1003", "Sofia", "Garcia", "Finance", "Finance Analyst", "Omar Khan", "active"),
+    Employee("D1004", "Ethan", "Brooks", "IT Support", "Help Desk Analyst", "Nina Patel", "active"),
+    Employee("D1005", "Maya", "Chen", "Identity", "IAM Analyst", "Abdulaziz Abdi", "active"),
+    Employee("D1006", "Lena", "Morris", "People", "HR Specialist", "Grace Lee", "active"),
+    Employee("D1007", "Caleb", "Stone", "Engineering", "Software Developer", "Maya Chen", "terminated"),
+    Employee("D1008", "Priya", "Shah", "Security", "Security Analyst", "Abdulaziz Abdi", "active"),
+    Employee("D1009", "Omar", "Khan", "Finance", "Finance Analyst", "Abdulaziz Abdi", "terminated"),
+    Employee("D1010", "Nina", "Patel", "IT Support", "Help Desk Analyst", "Abdulaziz Abdi", "active"),
+]
+
+
+def _clear_demo_state():
+    for employee in database.get_all_employees():
+        database.delete_employee(employee.get("employee_id"))
+    service._save_employees([])
+    service.audit_logger._save_audit_log([])
+
+
+def _seed_demo_state():
+    _clear_demo_state()
+    created = 0
+    for employee in DEMO_EMPLOYEES:
+        result = service.create_employee(employee)
+        if result.get("success"):
+            created += 1
+        if employee.status == "terminated":
+            service.terminate_employee(employee.employee_id)
+    service.update_employee_role("D1004", "IAM Analyst")
+    return created
+
+
 @app.get("/")
 def read_root():
     return {
         "message": "Enterprise IAM Lifecycle Lab API",
         "status": "running",
+    }
+
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy",
+        "service": "Enterprise IAM API",
+        "version": "1.0.0",
     }
 
 
@@ -203,3 +257,27 @@ def get_role_by_title(job_title: str):
 @app.post("/employees")
 def create_employee(employee: Employee):
     return service.create_employee(employee)
+
+
+@app.post("/demo/seed")
+def seed_demo_data():
+    created = _seed_demo_state()
+    events = service.audit_logger.get_events()
+    return {
+        "success": True,
+        "message": "Demo data loaded successfully.",
+        "employees_created": created,
+        "audit_events": len(events),
+    }
+
+
+@app.post("/demo/reset")
+def reset_demo_data():
+    created = _seed_demo_state()
+    events = service.audit_logger.get_events()
+    return {
+        "success": True,
+        "message": "Demo data reset successfully.",
+        "employees_created": created,
+        "audit_events": len(events),
+    }
