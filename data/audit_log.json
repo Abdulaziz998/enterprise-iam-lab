@@ -1,1 +1,204 @@
-[]
+[
+  {
+    "timestamp": "2026-07-21T09:16:09.642893Z",
+    "action": "CREATE",
+    "employee_id": "D1001",
+    "status": "SUCCESS",
+    "details": {
+      "username": "amina.hassan",
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.644340Z",
+    "action": "CREATE",
+    "employee_id": "D1002",
+    "status": "SUCCESS",
+    "details": {
+      "username": "noah.reed",
+      "job_title": "Security Analyst",
+      "department": "Security"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.645776Z",
+    "action": "CREATE",
+    "employee_id": "D1003",
+    "status": "SUCCESS",
+    "details": {
+      "username": "sofia.garcia",
+      "job_title": "Finance Analyst",
+      "department": "Finance"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.647040Z",
+    "action": "CREATE",
+    "employee_id": "D1004",
+    "status": "SUCCESS",
+    "details": {
+      "username": "ethan.brooks",
+      "job_title": "Help Desk Analyst",
+      "department": "IT Support"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.648254Z",
+    "action": "CREATE",
+    "employee_id": "D1005",
+    "status": "SUCCESS",
+    "details": {
+      "username": "maya.chen",
+      "job_title": "IAM Analyst",
+      "department": "Identity"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.649608Z",
+    "action": "CREATE",
+    "employee_id": "D1006",
+    "status": "SUCCESS",
+    "details": {
+      "username": "lena.morris",
+      "job_title": "HR Specialist",
+      "department": "People"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.651295Z",
+    "action": "CREATE",
+    "employee_id": "D1007",
+    "status": "SUCCESS",
+    "details": {
+      "username": "caleb.stone",
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.652920Z",
+    "action": "TERMINATE",
+    "employee_id": "D1007",
+    "status": "SUCCESS",
+    "details": {
+      "job_title": "Software Developer",
+      "department": "Engineering"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.654384Z",
+    "action": "CREATE",
+    "employee_id": "D1008",
+    "status": "SUCCESS",
+    "details": {
+      "username": "priya.shah",
+      "job_title": "Security Analyst",
+      "department": "Security"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.655666Z",
+    "action": "CREATE",
+    "employee_id": "D1009",
+    "status": "SUCCESS",
+    "details": {
+      "username": "omar.khan",
+      "job_title": "Finance Analyst",
+      "department": "Finance"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.657138Z",
+    "action": "TERMINATE",
+    "employee_id": "D1009",
+    "status": "SUCCESS",
+    "details": {
+      "job_title": "Finance Analyst",
+      "department": "Finance"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.658475Z",
+    "action": "CREATE",
+    "employee_id": "D1010",
+    "status": "SUCCESS",
+    "details": {
+      "username": "nina.patel",
+      "job_title": "Help Desk Analyst",
+      "department": "IT Support"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:16:09.659843Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "D1004",
+    "status": "SUCCESS",
+    "details": {
+      "old_job_title": "Help Desk Analyst",
+      "new_job_title": "IAM Analyst"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:17:17.674911Z",
+    "action": "CREATE",
+    "employee_id": "101010",
+    "status": "SUCCESS",
+    "details": {
+      "username": "smith.john",
+      "job_title": "Help Desk Analyst",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:17:30.989815Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "101010",
+    "status": "SUCCESS",
+    "details": {
+      "old_job_title": "Help Desk Analyst",
+      "new_job_title": "Software Developer"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:17:38.615089Z",
+    "action": "TERMINATE",
+    "employee_id": "101010",
+    "status": "SUCCESS",
+    "details": {
+      "job_title": "Software Developer",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:42:37.673228Z",
+    "action": "CREATE",
+    "employee_id": "10101",
+    "status": "SUCCESS",
+    "details": {
+      "username": "john.smith",
+      "job_title": "IAM Analyst",
+      "department": "IT"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:42:47.414693Z",
+    "action": "UPDATE_ROLE",
+    "employee_id": "10101",
+    "status": "SUCCESS",
+    "details": {
+      "old_job_title": "IAM Analyst",
+      "new_job_title": "Software Developer"
+    }
+  },
+  {
+    "timestamp": "2026-07-21T09:42:50.156106Z",
+    "action": "TERMINATE",
+    "employee_id": "10101",
+    "status": "SUCCESS",
+    "details": {
+      "job_title": "Software Developer",
+      "department": "IT"
+    }
+  }
+]

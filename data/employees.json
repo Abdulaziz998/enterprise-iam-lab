@@ -1,1 +1,186 @@
-[]
+[
+  {
+    "employee_id": "D1001",
+    "first_name": "Amina",
+    "last_name": "Hassan",
+    "department": "Engineering",
+    "job_title": "Software Developer",
+    "manager": "Maya Chen",
+    "status": "active",
+    "username": "amina.hassan",
+    "groups": [
+      "engineering"
+    ],
+    "applications": [
+      "code_repo",
+      "ci_system",
+      "dev_aws_account"
+    ]
+  },
+  {
+    "employee_id": "D1002",
+    "first_name": "Noah",
+    "last_name": "Reed",
+    "department": "Security",
+    "job_title": "Security Analyst",
+    "manager": "Priya Shah",
+    "status": "active",
+    "username": "noah.reed",
+    "groups": [
+      "security"
+    ],
+    "applications": [
+      "siem",
+      "incident_response_tool"
+    ]
+  },
+  {
+    "employee_id": "D1003",
+    "first_name": "Sofia",
+    "last_name": "Garcia",
+    "department": "Finance",
+    "job_title": "Finance Analyst",
+    "manager": "Omar Khan",
+    "status": "active",
+    "username": "sofia.garcia",
+    "groups": [
+      "finance"
+    ],
+    "applications": [
+      "finance_ledger",
+      "expense_portal"
+    ]
+  },
+  {
+    "employee_id": "D1004",
+    "first_name": "Ethan",
+    "last_name": "Brooks",
+    "department": "IT Support",
+    "job_title": "IAM Analyst",
+    "manager": "Nina Patel",
+    "status": "active",
+    "username": "ethan.brooks",
+    "groups": [
+      "iam_team"
+    ],
+    "applications": [
+      "iam_console",
+      "ticketing_system"
+    ]
+  },
+  {
+    "employee_id": "D1005",
+    "first_name": "Maya",
+    "last_name": "Chen",
+    "department": "Identity",
+    "job_title": "IAM Analyst",
+    "manager": "Abdulaziz Abdi",
+    "status": "active",
+    "username": "maya.chen",
+    "groups": [
+      "iam_team"
+    ],
+    "applications": [
+      "iam_console",
+      "ticketing_system"
+    ]
+  },
+  {
+    "employee_id": "D1006",
+    "first_name": "Lena",
+    "last_name": "Morris",
+    "department": "People",
+    "job_title": "HR Specialist",
+    "manager": "Grace Lee",
+    "status": "active",
+    "username": "lena.morris",
+    "groups": [
+      "hr"
+    ],
+    "applications": [
+      "hris",
+      "onboarding_portal"
+    ]
+  },
+  {
+    "employee_id": "D1007",
+    "first_name": "Caleb",
+    "last_name": "Stone",
+    "department": "Engineering",
+    "job_title": "Software Developer",
+    "manager": "Maya Chen",
+    "status": "terminated",
+    "username": "caleb.stone",
+    "groups": [],
+    "applications": []
+  },
+  {
+    "employee_id": "D1008",
+    "first_name": "Priya",
+    "last_name": "Shah",
+    "department": "Security",
+    "job_title": "Security Analyst",
+    "manager": "Abdulaziz Abdi",
+    "status": "active",
+    "username": "priya.shah",
+    "groups": [
+      "security"
+    ],
+    "applications": [
+      "siem",
+      "incident_response_tool"
+    ]
+  },
+  {
+    "employee_id": "D1009",
+    "first_name": "Omar",
+    "last_name": "Khan",
+    "department": "Finance",
+    "job_title": "Finance Analyst",
+    "manager": "Abdulaziz Abdi",
+    "status": "terminated",
+    "username": "omar.khan",
+    "groups": [],
+    "applications": []
+  },
+  {
+    "employee_id": "D1010",
+    "first_name": "Nina",
+    "last_name": "Patel",
+    "department": "IT Support",
+    "job_title": "Help Desk Analyst",
+    "manager": "Abdulaziz Abdi",
+    "status": "active",
+    "username": "nina.patel",
+    "groups": [
+      "helpdesk"
+    ],
+    "applications": [
+      "ticketing_system"
+    ]
+  },
+  {
+    "employee_id": "101010",
+    "first_name": "smith",
+    "last_name": "john",
+    "department": "IT",
+    "job_title": "Software Developer",
+    "manager": null,
+    "status": "terminated",
+    "username": "smith.john",
+    "groups": [],
+    "applications": []
+  },
+  {
+    "employee_id": "10101",
+    "first_name": "John",
+    "last_name": "Smith",
+    "department": "IT",
+    "job_title": "Software Developer",
+    "manager": null,
+    "status": "terminated",
+    "username": "john.smith",
+    "groups": [],
+    "applications": []
+  }
+]
