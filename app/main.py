@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 
 from fastapi import FastAPI
@@ -8,20 +9,34 @@ from pydantic import BaseModel
 from app.iam_service import IAMService
 from app.models import Employee
 
+
 app = FastAPI(
     title="Enterprise IAM Lifecycle Lab",
     version="1.0.0",
 )
 
+
+# Local development origins
+allowed_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+# Production frontend origin supplied through Render.
+frontend_url = os.getenv("FRONTEND_URL", "").strip().rstrip("/")
+
+if frontend_url and frontend_url not in allowed_origins:
+    allowed_origins.append(frontend_url)
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=allowed_origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 service = IAMService()
 database = service.database
@@ -32,36 +47,123 @@ class MoveEmployeeRequest(BaseModel):
 
 
 DEMO_EMPLOYEES = [
-    Employee("D1001", "Amina", "Hassan", "Engineering", "Software Developer", "Maya Chen", "active"),
-    Employee("D1002", "Noah", "Reed", "Security", "Security Analyst", "Priya Shah", "active"),
-    Employee("D1003", "Sofia", "Garcia", "Finance", "Finance Analyst", "Omar Khan", "active"),
-    Employee("D1004", "Ethan", "Brooks", "IT Support", "Help Desk Analyst", "Nina Patel", "active"),
-    Employee("D1005", "Maya", "Chen", "Identity", "IAM Analyst", "Abdulaziz Abdi", "active"),
-    Employee("D1006", "Lena", "Morris", "People", "HR Specialist", "Grace Lee", "active"),
-    Employee("D1007", "Caleb", "Stone", "Engineering", "Software Developer", "Maya Chen", "terminated"),
-    Employee("D1008", "Priya", "Shah", "Security", "Security Analyst", "Abdulaziz Abdi", "active"),
-    Employee("D1009", "Omar", "Khan", "Finance", "Finance Analyst", "Abdulaziz Abdi", "terminated"),
-    Employee("D1010", "Nina", "Patel", "IT Support", "Help Desk Analyst", "Abdulaziz Abdi", "active"),
+    Employee(
+        "D1001",
+        "Amina",
+        "Hassan",
+        "Engineering",
+        "Software Developer",
+        "Maya Chen",
+        "active",
+    ),
+    Employee(
+        "D1002",
+        "Noah",
+        "Reed",
+        "Security",
+        "Security Analyst",
+        "Priya Shah",
+        "active",
+    ),
+    Employee(
+        "D1003",
+        "Sofia",
+        "Garcia",
+        "Finance",
+        "Finance Analyst",
+        "Omar Khan",
+        "active",
+    ),
+    Employee(
+        "D1004",
+        "Ethan",
+        "Brooks",
+        "IT Support",
+        "Help Desk Analyst",
+        "Nina Patel",
+        "active",
+    ),
+    Employee(
+        "D1005",
+        "Maya",
+        "Chen",
+        "Identity",
+        "IAM Analyst",
+        "Abdulaziz Abdi",
+        "active",
+    ),
+    Employee(
+        "D1006",
+        "Lena",
+        "Morris",
+        "People",
+        "HR Specialist",
+        "Grace Lee",
+        "active",
+    ),
+    Employee(
+        "D1007",
+        "Caleb",
+        "Stone",
+        "Engineering",
+        "Software Developer",
+        "Maya Chen",
+        "terminated",
+    ),
+    Employee(
+        "D1008",
+        "Priya",
+        "Shah",
+        "Security",
+        "Security Analyst",
+        "Abdulaziz Abdi",
+        "active",
+    ),
+    Employee(
+        "D1009",
+        "Omar",
+        "Khan",
+        "Finance",
+        "Finance Analyst",
+        "Abdulaziz Abdi",
+        "terminated",
+    ),
+    Employee(
+        "D1010",
+        "Nina",
+        "Patel",
+        "IT Support",
+        "Help Desk Analyst",
+        "Abdulaziz Abdi",
+        "active",
+    ),
 ]
 
 
 def _clear_demo_state():
     for employee in database.get_all_employees():
         database.delete_employee(employee.get("employee_id"))
+
     service._save_employees([])
     service.audit_logger._save_audit_log([])
 
 
 def _seed_demo_state():
     _clear_demo_state()
+
     created = 0
+
     for employee in DEMO_EMPLOYEES:
         result = service.create_employee(employee)
+
         if result.get("success"):
             created += 1
+
         if employee.status == "terminated":
             service.terminate_employee(employee.employee_id)
+
     service.update_employee_role("D1004", "IAM Analyst")
+
     return created
 
 
@@ -85,6 +187,7 @@ def health():
 @app.get("/employees")
 def get_employees():
     employees = database.get_all_employees()
+
     return {
         "success": True,
         "count": len(employees),
@@ -95,6 +198,7 @@ def get_employees():
 @app.get("/employees/{employee_id}")
 def get_employee_by_id(employee_id: str):
     employee = database.get_employee_by_id(employee_id)
+
     if employee is None:
         return JSONResponse(
             status_code=404,
@@ -144,6 +248,7 @@ def update_employee(employee_id: str, employee: Employee):
 @app.delete("/employees/{employee_id}")
 def delete_employee(employee_id: str):
     delete_result = database.delete_employee(employee_id)
+
     if not delete_result.get("success", False):
         return JSONResponse(
             status_code=404,
@@ -161,13 +266,30 @@ def delete_employee(employee_id: str):
 
 @app.post("/employees/{employee_id}/move")
 def move_employee(employee_id: str, payload: MoveEmployeeRequest):
-    result = service.update_employee_role(employee_id, payload.new_job_title)
+    result = service.update_employee_role(
+        employee_id,
+        payload.new_job_title,
+    )
 
     if not result.get("success", False):
         message = result.get("message", "Employee not found.")
+
         if "not found" in message.lower():
-            return JSONResponse(status_code=404, content={"success": False, "message": message})
-        return JSONResponse(status_code=400, content={"success": False, "message": message})
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "success": False,
+                    "message": message,
+                },
+            )
+
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "message": message,
+            },
+        )
 
     return {
         "success": True,
@@ -179,10 +301,14 @@ def move_employee(employee_id: str, payload: MoveEmployeeRequest):
 @app.post("/employees/{employee_id}/terminate")
 def terminate_employee(employee_id: str):
     result = service.terminate_employee(employee_id)
+
     if not result.get("success", False):
         return JSONResponse(
             status_code=404,
-            content={"success": False, "message": result.get("message")},
+            content={
+                "success": False,
+                "message": result.get("message"),
+            },
         )
 
     return {
@@ -193,19 +319,35 @@ def terminate_employee(employee_id: str):
 
 
 @app.get("/audit-logs")
-def get_audit_logs(action: Optional[str] = None, status: Optional[str] = None, employee_id: Optional[str] = None):
+def get_audit_logs(
+    action: Optional[str] = None,
+    status: Optional[str] = None,
+    employee_id: Optional[str] = None,
+):
     events = service.audit_logger.get_events()
 
     if action:
         action_lower = action.lower()
-        events = [event for event in events if event.get("action", "").lower() == action_lower]
+        events = [
+            event
+            for event in events
+            if event.get("action", "").lower() == action_lower
+        ]
 
     if status:
         status_lower = status.lower()
-        events = [event for event in events if event.get("status", "").lower() == status_lower]
+        events = [
+            event
+            for event in events
+            if event.get("status", "").lower() == status_lower
+        ]
 
     if employee_id:
-        events = [event for event in events if event.get("employee_id") == employee_id]
+        events = [
+            event
+            for event in events
+            if event.get("employee_id") == employee_id
+        ]
 
     return {
         "success": True,
@@ -217,13 +359,17 @@ def get_audit_logs(action: Optional[str] = None, status: Optional[str] = None, e
 @app.get("/roles")
 def get_roles():
     roles_data = service._load_roles()
+
     roles = [
         {
             "job_title": title,
             "groups": details.get("groups", []),
             "applications": details.get("applications", []),
         }
-        for title, details in sorted(roles_data.items(), key=lambda item: item[0])
+        for title, details in sorted(
+            roles_data.items(),
+            key=lambda item: item[0],
+        )
     ]
 
     return {
@@ -241,7 +387,10 @@ def get_role_by_title(job_title: str):
     if role_definition is None:
         return JSONResponse(
             status_code=404,
-            content={"success": False, "message": "Role not found."},
+            content={
+                "success": False,
+                "message": "Role not found.",
+            },
         )
 
     return {
@@ -263,6 +412,7 @@ def create_employee(employee: Employee):
 def seed_demo_data():
     created = _seed_demo_state()
     events = service.audit_logger.get_events()
+
     return {
         "success": True,
         "message": "Demo data loaded successfully.",
@@ -275,6 +425,7 @@ def seed_demo_data():
 def reset_demo_data():
     created = _seed_demo_state()
     events = service.audit_logger.get_events()
+
     return {
         "success": True,
         "message": "Demo data reset successfully.",
