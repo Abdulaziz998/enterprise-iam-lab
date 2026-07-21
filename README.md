@@ -3,13 +3,14 @@
 > Full-Stack Identity & Access Management Platform built with FastAPI, React, SQLite, Docker, and GitHub Actions.
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688)
-![React](https://img.shields.io/badge/React-Frontend-61DAFB)
-![SQLite](https://img.shields.io/badge/SQLite-Database-003B57)
-![Docker](https://img.shields.io/badge/Docker-Container-2496ED)
+![FastAPI](https://img.shields.io/badge/FastAPI-REST_API-009688)
+![React](https://img.shields.io/badge/React-Vite-61DAFB)
+![SQLite](https://img.shields.io/badge/SQLite-Persistence-003B57)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI/CD-2088FF)
-![License](https://img.shields.io/badge/License-MIT-green)
-![Tests](https://img.shields.io/badge/Tests-100%2B_Passing-success)
+![RBAC](https://img.shields.io/badge/RBAC-Implemented-success)
+![IAM](https://img.shields.io/badge/Identity_Access_Management-Enterprise-blueviolet)
+![Tests](https://img.shields.io/badge/Tests-100%2B-success)
 
 Enterprise IAM is a production-style identity administration lab for Joiner, Mover, and Leaver workflows. It combines a FastAPI backend, SQLite-backed employee persistence, audit logging, RBAC role definitions, and a React administration console.
 
