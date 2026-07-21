@@ -26,3 +26,6 @@ export const getAuditLogs = (filters = {}) => fetchJson(`/audit-logs${query(filt
 export const createEmployee = (payload) => fetchJson("/employees", { method: "POST", body: JSON.stringify(payload) });
 export const moveEmployee = (id, newJobTitle) => fetchJson(`/employees/${encodeURIComponent(id)}/move`, { method: "POST", body: JSON.stringify({ new_job_title: newJobTitle }) });
 export const terminateEmployee = (id) => fetchJson(`/employees/${encodeURIComponent(id)}/terminate`, { method: "POST" });
+export const getHealth = () => fetchJson("/health");
+export const seedDemoData = () => fetchJson("/demo/seed", { method: "POST" });
+export const resetDemoData = () => fetchJson("/demo/reset", { method: "POST" });

@@ -49,6 +49,10 @@ def test_sqlite_mover_updates_json_and_sqlite(tmp_path):
     assert row[1] == "IAM Analyst"
     assert row[2] == "alex.morgan"
 
+    persisted = service.database.get_employee_by_id("M200")
+    assert persisted["groups"] == ["iam_team"]
+    assert persisted["applications"] == ["iam_console", "ticketing_system"]
+
 
 def test_sqlite_mover_employee_id_and_username_preserved(tmp_path):
     employees_file = tmp_path / "employees.json"

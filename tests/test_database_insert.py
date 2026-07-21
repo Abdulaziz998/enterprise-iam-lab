@@ -80,3 +80,28 @@ def test_employee_exists_in_sqlite_after_insert(tmp_path):
     assert row[1] == employee.first_name
     assert row[2] == employee.last_name
     assert row[3] == employee.username
+
+
+def test_insert_employee_persists_groups_and_applications(tmp_path):
+    db_file = tmp_path / "iam.db"
+    db = Database(db_path=str(db_file))
+    db.initialize()
+
+    employee = Employee(
+        employee_id="I004",
+        first_name="Jordan",
+        last_name="Lee",
+        department="IT Support",
+        job_title="Help Desk Analyst",
+        manager="I010",
+        username="jordan.lee",
+        groups=["helpdesk"],
+        applications=["ticketing_system"],
+    )
+
+    result = db.insert_employee(employee)
+    persisted = db.get_employee_by_id("I004")
+
+    assert result["success"] is True
+    assert persisted["groups"] == ["helpdesk"]
+    assert persisted["applications"] == ["ticketing_system"]

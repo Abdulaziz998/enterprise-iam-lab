@@ -72,6 +72,8 @@ def test_get_employee_by_id_contains_all_fields(tmp_path):
         "manager",
         "status",
         "username",
+        "groups",
+        "applications",
     }
 
 
@@ -123,3 +125,45 @@ def test_get_employee_by_id_exact_match_with_multiple_records(tmp_path):
     assert data["employee"]["employee_id"] == "E503"
     assert data["employee"]["first_name"] == "Gina"
     assert data["employee"]["last_name"] == "Reed"
+
+
+def test_created_employee_detail_includes_role_groups_and_applications(tmp_path):
+    from pathlib import Path
+
+    from app.iam_service import IAMService
+
+    original_service = main.service
+    original_database = main.database
+    test_service = IAMService(
+        employees_path=str(tmp_path / "employees.json"),
+        roles_path=str(Path(__file__).resolve().parents[1] / "data" / "roles.json"),
+        audit_log_path=str(tmp_path / "audit_log.json"),
+        db_path=str(tmp_path / "iam.db"),
+    )
+    main.service = test_service
+    main.database = test_service.database
+
+    client = TestClient(main.app)
+    try:
+        create_response = client.post(
+            "/employees",
+            json={
+                "employee_id": "API-GROUPS-1",
+                "first_name": "Harper",
+                "last_name": "Stone",
+                "department": "IT Support",
+                "job_title": "Help Desk Analyst",
+                "manager": "Nina Patel",
+                "status": "active",
+            },
+        )
+        assert create_response.status_code == 200
+
+        detail_response = client.get("/employees/API-GROUPS-1")
+        assert detail_response.status_code == 200
+        employee = detail_response.json()["employee"]
+        assert employee["groups"] == ["helpdesk"]
+        assert employee["applications"] == ["ticketing_system"]
+    finally:
+        main.service = original_service
+        main.database = original_database

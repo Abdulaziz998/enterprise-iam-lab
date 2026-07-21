@@ -62,7 +62,11 @@ def test_get_employee_by_id_contains_all_fields(tmp_path):
         "manager",
         "status",
         "username",
+        "groups",
+        "applications",
     }
+    assert result["groups"] == []
+    assert result["applications"] == []
 
 
 def test_get_employee_by_id_returns_none_for_missing_employee(tmp_path):
