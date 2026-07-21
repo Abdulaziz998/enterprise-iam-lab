@@ -1,6 +1,10 @@
+<div align="center">
+
 # Enterprise IAM Platform
 
-> Full-Stack Identity & Access Management (IAM) platform built with **FastAPI, React, SQLite, Docker, and GitHub Actions**.
+### Full-Stack Identity & Access Management (IAM) Platform
+
+Production-style IAM platform demonstrating Joiner, Mover, and Leaver (JML) workflows, Role-Based Access Control (RBAC), workforce analytics, authentication, audit logging, and persistent identity provisioning.
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-REST_API-009688)
@@ -13,11 +17,32 @@
 ![Tests](https://img.shields.io/badge/Tests-100%2B-success)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-Enterprise IAM is a production-style Identity & Access Management platform that automates employee lifecycle management through **Joiner, Mover, and Leaver (JML)** workflows. It demonstrates RBAC provisioning, authentication, audit logging, workforce analytics, persistent data storage, and enterprise-style administration using a modern React frontend and FastAPI backend.
+</div>
 
 ---
 
-# ✨ Features
+# Enterprise Overview
+
+Enterprise IAM is a production-style Identity & Access Management platform that automates employee lifecycle management through **Joiner, Mover, and Leaver (JML)** workflows.
+
+The application demonstrates enterprise IAM concepts including:
+
+- Identity Lifecycle Management
+- Role-Based Access Control (RBAC)
+- Workforce Analytics
+- Authentication
+- Audit Logging
+- Employee Provisioning
+- Global Search
+- Persistent Data Storage
+- Dockerized Deployment
+- CI/CD Automation
+
+Designed as a portfolio project that mirrors common enterprise IAM administration platforms.
+
+---
+
+# ✨ Key Features
 
 - ✅ Authentication
 - ✅ Joiner (Employee Onboarding)
@@ -25,6 +50,7 @@ Enterprise IAM is a production-style Identity & Access Management platform that 
 - ✅ Leaver (Employee Termination)
 - ✅ Role-Based Access Control (RBAC)
 - ✅ Employee Directory
+- ✅ Employee Detail Drawer
 - ✅ Workforce Analytics Dashboard
 - ✅ Audit Logging
 - ✅ Global Employee Search
@@ -38,45 +64,57 @@ Enterprise IAM is a production-style Identity & Access Management platform that 
 
 # 📸 Screenshots
 
-### Login
+## Login
 
-> *(Insert login screenshot here)*
-
----
-
-### Dashboard
-
-> *(Insert dashboard screenshot here)*
+<p align="center">
+<img src="images/login.png" width="900">
+</p>
 
 ---
 
-### Employee Directory
+## Dashboard
 
-> *(Insert employee directory screenshot here)*
-
----
-
-### Joiner Workflow
-
-> *(Insert create employee screenshot here)*
+<p align="center">
+<img src="images/dashboard.png" width="900">
+</p>
 
 ---
 
-### Mover Workflow
+## Employee Directory
 
-> *(Insert change role screenshot here)*
+<p align="center">
+<img src="images/employees.png" width="900">
+</p>
 
 ---
 
-### Audit Logs
+## Joiner Workflow
 
-> *(Insert audit logs screenshot here)*
+<p align="center">
+<img src="images/create-employee.png" width="900">
+</p>
+
+---
+
+## Mover Workflow
+
+<p align="center">
+<img src="images/change-role.png" width="900">
+</p>
+
+---
+
+## Audit Logs
+
+<p align="center">
+<img src="images/audit-logs.png" width="900">
+</p>
 
 ---
 
 # 🏗 Architecture
 
-```
+```text
                     Browser
                         │
                         ▼
@@ -96,11 +134,11 @@ Enterprise IAM is a production-style Identity & Access Management platform that 
 
 ---
 
-# 🛠 Tech Stack
+# 🛠 Technology Stack
 
 | Layer | Technology |
 |--------|------------|
-| Frontend | React, Vite |
+| Frontend | React • Vite |
 | Backend | FastAPI |
 | Database | SQLite |
 | Authentication | Demo Authentication |
@@ -112,27 +150,25 @@ Enterprise IAM is a production-style Identity & Access Management platform that 
 
 ---
 
-# 📋 Project Overview
+# 📋 IAM Workflows
 
-The platform simulates common enterprise IAM operations.
-
-### Joiner
+## Joiner
 
 - Create employee identities
 - Generate usernames
 - Assign RBAC roles
-- Provision groups
+- Provision security groups
 - Provision applications
 
-### Mover
+## Mover
 
 - Change employee role
-- Remove previous permissions
-- Assign new permissions
+- Remove previous access
+- Assign new access
 - Preserve identity information
-- Record audit event
+- Record audit events
 
-### Leaver
+## Leaver
 
 - Disable employee
 - Remove group memberships
@@ -154,7 +190,7 @@ The platform simulates common enterprise IAM operations.
 | GET | `/roles` | List RBAC roles |
 | GET | `/audit-logs` | View audit events |
 
-Business logic lives in **app/iam_service.py** while API routing lives in **app/main.py**.
+Business logic resides in **app/iam_service.py** while API routing is implemented in **app/main.py**.
 
 ---
 
@@ -175,7 +211,7 @@ The React administration console includes:
 - Responsive UI
 - Toast Notifications
 
-Configure the API:
+Configure the frontend API:
 
 ```bash
 VITE_API_BASE_URL=http://localhost:8000
@@ -205,22 +241,22 @@ npm install
 npm run dev
 ```
 
-Open
+Open:
 
 - Frontend → http://localhost:5173
-- API Docs → http://localhost:8000/docs
+- API Documentation → http://localhost:8000/docs
 
 ---
 
 # 🐳 Docker
 
-Run both services
+Run both services:
 
 ```bash
 docker compose up --build
 ```
 
-Services
+Services:
 
 - Frontend → http://localhost:3000
 - Backend → http://localhost:8000
@@ -229,43 +265,51 @@ Services
 
 # ✅ Testing
 
-Backend
+Backend Tests
 
 ```bash
 python3 -m pytest -q
+```
+
+Frontend Build
+
+```bash
+cd frontend
+npm run build
 ```
 
 Current Status
 
 - ✅ 100+ Backend Tests Passing
 - ✅ Production Frontend Build Passing
-- ✅ GitHub Actions CI/CD
+- ✅ GitHub Actions CI/CD Passing
 - ✅ SQLite Persistence Verified
 
 ---
 
-# ⚙️ CI/CD
+# ⚙️ Continuous Integration
 
 GitHub Actions automatically executes on every Push and Pull Request.
 
-Pipeline
+Pipeline includes:
 
 - Install Python dependencies
-- Execute backend test suite
+- Execute backend tests
 - Install frontend dependencies
 - Generate production React build
 
 ---
 
-# 📁 Folder Structure
+# 📁 Repository Structure
 
-```
+```text
 enterprise-iam-lab/
 ├── app/
 ├── frontend/
 ├── tests/
 ├── docs/
 ├── data/
+├── images/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
@@ -274,7 +318,7 @@ enterprise-iam-lab/
 
 ---
 
-# 🚧 Roadmap
+# 🚧 Future Enhancements
 
 - [x] Joiner Workflow
 - [x] Mover Workflow
@@ -286,12 +330,12 @@ enterprise-iam-lab/
 - [x] Global Search
 - [x] CSV Export
 - [ ] Microsoft Entra ID Integration
-- [ ] Okta API Integration
+- [ ] Okta Integration
 - [ ] SCIM Provisioning
-- [ ] Multi-Factor Authentication
+- [ ] Multi-Factor Authentication (MFA)
 - [ ] Access Review Campaigns
 - [ ] Approval Workflows
-- [ ] Live Cloud Deployment
+- [ ] Cloud Deployment (Azure/AWS)
 
 ---
 
@@ -299,11 +343,11 @@ enterprise-iam-lab/
 
 **Abdulaziz Abdi**
 
-- LinkedIn: https://linkedin.com/in/abdulaziz-abdi
 - GitHub: https://github.com/Abdulaziz998
+- LinkedIn: https://linkedin.com/in/abdulaziz-abdi
 
 ---
 
 # 📄 License
 
-This project is licensed under the MIT License.
+Licensed under the MIT License.
