@@ -1,6 +1,8 @@
 # Enterprise IAM Platform
 
-Enterprise IAM is a production-style identity administration lab for Joiner, Mover, and Leaver workflows. It combines a FastAPI backend, SQLite-backed employee persistence, audit logging, RBAC role definitions, and a React administration console.
+> Full-Stack Identity & Access Management Platform built with FastAPI, React, SQLite, Docker, and GitHub Actions.
+
+Enterprise IAM is a production-style identity governance platform that automates Joiner, Mover, and Leaver workflows, role-based access control (RBAC), authentication, audit logging, and workforce lifecycle management.
 
 ## Project Overview
 
